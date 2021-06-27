@@ -1,16 +1,26 @@
-import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import React from "react";
+import { View, StyleSheet, Text, Button } from "react-native";
 
-const MealDetailsScreen = () => {
-    return <View style={styles.screen}><Text>The Meals Details Screen</Text></View>;
-}
+const MealDetailsScreen = ({ navigation }) => {
+  return (
+    <View style={styles.screen}>
+      <Text>The Meals Details Screen</Text>
+      <Button
+        title="Go to main screen"
+        onPress={() => {
+          navigation.popToTop();
+        }}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-}) 
+  screen: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
-export default MealDetailsScreen
+export default MealDetailsScreen;
