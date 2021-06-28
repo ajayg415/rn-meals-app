@@ -1,29 +1,40 @@
 import React from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 
-import { CATEGORIES } from "../data/dummy-data";
+import { CATEGORIES, MEALS } from "../data/dummy-data";
+import MealItem from "../components/MealItem";
 
-const CategoryMealsScreen = ({ navigation }) => {
-  const catId = navigation.getParam("categoryId");
-  const category = CATEGORIES.find((cat) => cat.id === catId);
+const CategoryMealScreen = (props) => {
+  const renderMealItem = (itemData) => {
+    return <MealItem onSelectMeal={() => {}} item={itemData.item} />;
+  };
+
+  const catId = props.navigation.getParam("categoryId");
+
+  const displayedMeals = MEALS.filter(
+    (meal) => meal.categoryIds.indexOf(catId) >= 0
+  );
+
   return (
     <View style={styles.screen}>
-      <Text>Categories Meals Screen</Text>
-      <Text>{category.title}</Text>
-      <Button
-        title="Go To Meals Details!"
-        onPress={() => {
-          navigation.navigate("MealDetails");
-        }}
-      />
-      <Button
-        title="Go Back"
-        onPress={() => {
-          navigation.goBack();
-        }}
+      <FlatList
+        data={displayedMeals}
+        keyExtractor={(item, index) => item.id}
+        renderItem={renderMealItem}
+        style={{ width: "100%" }}
       />
     </View>
   );
+};
+
+CategoryMealScreen.navigationOptions = (navigationData) => {
+  const catId = navigationData.navigation.getParam("categoryId");
+
+  const selectedCategory = CATEGORIES.find((cat) => cat.id === catId);
+
+  return {
+    headerTitle: selectedCategory.title,
+  };
 };
 
 const styles = StyleSheet.create({
@@ -31,16 +42,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 15,
   },
 });
 
-CategoryMealsScreen.navigationOptions = ({ navigation }) => {
-  const catId = navigation.getParam("categoryId");
-  const category = CATEGORIES.find((cat) => cat.id === catId);
-
-  return {
-    headerTitle: category.title,
-  };
-};
-
-export default CategoryMealsScreen;
+export default CategoryMealScreen;
